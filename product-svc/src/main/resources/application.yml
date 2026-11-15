@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: product-svc
+  mongodb:
+    uri: "mongodb://${MONGO_ROOT_USERNAME:admin}:${MONGO_ROOT_PASSWORD:admin}@localhost:27017/${MONGO_DATABASE:flashsalex-products}?authSource=admin"
+  data:
+    mongodb:
+      auto-index-creation: true
+
+server:
+  port: 9000

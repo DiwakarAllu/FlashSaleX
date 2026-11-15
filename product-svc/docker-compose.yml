@@ -1,0 +1,32 @@
+services:
+
+  product-mongodb:
+    image: mongo:8
+    container_name: flashsalex-product-mongodb
+
+    restart: unless-stopped
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - product_mongo_data:/data/db
+
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --eval
+        - "db.adminCommand('ping').ok"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  product_mongo_data:
