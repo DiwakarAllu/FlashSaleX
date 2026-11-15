@@ -13,20 +13,7 @@
 	<artifactId>product-svc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>product-svc</name>
-	<description/>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+	<description>Product catalog REST API for FlashSaleX</description>
 	<properties>
 		<java.version>25</java.version>
 	</properties>
@@ -83,6 +70,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
 

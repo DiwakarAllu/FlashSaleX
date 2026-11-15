@@ -1,19 +1,16 @@
 package com.flashsalex.product.controller;
 
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
+import com.flashsalex.product.dto.ProductRequest;
+import com.flashsalex.product.dto.ProductResponse;
+import com.flashsalex.product.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.flashsalex.product.dto.ProductRequest;
-import com.flashsalex.product.dto.ProductResponse;
-import com.flashsalex.product.service.ProductService;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -38,6 +35,14 @@ public class ProductController {
         @PageableDefault(size = 20) Pageable pageable
     ) {
         return ResponseEntity.ok(productService.getAllProducts(pageable));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductResponse>> searchProducts(
+        @RequestParam String q,
+        @PageableDefault(size = 20) Pageable pageable
+    ) {
+        return ResponseEntity.ok(productService.searchProducts(q, pageable));
     }
 
     @PutMapping("/{id}")

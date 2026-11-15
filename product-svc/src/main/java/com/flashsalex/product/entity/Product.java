@@ -1,6 +1,5 @@
 package com.flashsalex.product.entity;
 
-import jakarta.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -14,9 +13,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /*
  * Product catalog data. Inventory quantity is owned by Inventory Service and
@@ -34,7 +33,6 @@ public class Product {
     private String id;
 
     @Indexed(unique = true)
-    @NotBlank
     private String sku;
 
     private String title;
@@ -53,7 +51,7 @@ public class Product {
 
     private List<String> images;
 
-    private Map<String, String> specifications;
+    private Map<String, Object> specifications;
 
     @Builder.Default
     private boolean active = true;

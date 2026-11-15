@@ -1,29 +1,24 @@
 package com.flashsalex.product.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import com.flashsalex.product.dto.ProductRequest;
 import com.flashsalex.product.dto.ProductResponse;
 import com.flashsalex.product.entity.Product;
 import com.flashsalex.product.exception.DuplicateProductException;
 import com.flashsalex.product.exception.ProductNotFoundException;
 import com.flashsalex.product.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.stereotype.Service;
-
-import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final MongoTemplate mongoTemplate;
 
     @Override
     public ProductResponse createProduct(ProductRequest request) {
@@ -34,8 +29,6 @@ public class ProductServiceImpl implements ProductService {
             );
         }
 
-        Instant now = Instant.now();
-
         Product product = Product.builder()
             .sku(request.sku())
             .title(request.title())
@@ -45,10 +38,8 @@ public class ProductServiceImpl implements ProductService {
             .price(request.price())
             .currency(request.currency())
             .images(request.images() == null ? List.of() : request.images())
-            .specifications(request.specifications() == null ? java.util.Map.of() : request.specifications())
+            .specifications(request.specifications() == null ? Map.of() : request.specifications())
             .active(true)
-            .createdAt(now)
-            .updatedAt(now)
             .build();
 
         return toResponse(productRepository.save(product));
@@ -63,24 +54,21 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
+        return productRepository.findByActiveTrue(pageable)
+            .map(this::toResponse);
+    }
 
-        Query query = new Query()
-            .addCriteria(Criteria.where("active").is(true))
-            .with(pageable);
+    @Override
+    public Page<ProductResponse> searchProducts(String query, Pageable pageable) {
+        if (query == null || query.isBlank()) {
+            throw new IllegalArgumentException("Search query must not be blank");
+        }
 
-        List<Product> products =
-            mongoTemplate.find(query, Product.class);
-
-        long total = mongoTemplate.count(
-            Query.query(Criteria.where("active").is(true)),
-            Product.class
-        );
-
-        return new PageImpl<>(
-            products.stream().map(this::toResponse).toList(),
-            pageable,
-            total
-        );
+        return productRepository.searchActiveProducts(
+                Pattern.quote(query.trim()),
+                pageable
+            )
+            .map(this::toResponse);
     }
 
     @Override
@@ -107,8 +95,7 @@ public class ProductServiceImpl implements ProductService {
         product.setImages(request.images() == null
             ? List.of() : request.images());
         product.setSpecifications(request.specifications() == null
-            ? java.util.Map.of() : request.specifications());
-        product.setUpdatedAt(Instant.now());
+            ? Map.of() : request.specifications());
 
         return toResponse(productRepository.save(product));
     }
@@ -119,37 +106,13 @@ public class ProductServiceImpl implements ProductService {
         Product product = findProduct(id);
 
         product.setActive(false);
-        product.setUpdatedAt(Instant.now());
-
         productRepository.save(product);
     }
 
     @Override
-    public Page<ProductResponse> getProductsByCategory(String category,Pageable pageable) {
-
-        Query query = new Query()
-            .addCriteria(
-                Criteria.where("active").is(true)
-                    .and("category").is(category)
-            )
-            .with(pageable);
-
-        List<Product> products = mongoTemplate.find(query, Product.class);
-
-        Query countQuery = Query.query(
-            Criteria.where("active").is(true)
-                .and("category").is(category)
-        );
-
-        long total = mongoTemplate.count(
-            countQuery, Product.class
-        );
-
-        return new PageImpl<>(
-            products.stream().map(this::toResponse).toList(),
-            pageable,
-            total
-        );
+    public Page<ProductResponse> getProductsByCategory(String category, Pageable pageable) {
+        return productRepository.findByActiveTrueAndCategoryIgnoreCase(category, pageable)
+            .map(this::toResponse);
     }
 
     private Product findProduct(String id) {
