@@ -1,4 +1,5 @@
 package com.flashsalex.product.dto;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
@@ -9,10 +10,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-
 public record ProductRequest(
 
     @NotBlank(message = "SKU is required")
+    @Size(max = 64)
     String sku,
 
     @NotBlank(message = "Product title is required")
@@ -20,12 +21,15 @@ public record ProductRequest(
     String title,
 
     @NotBlank(message = "Description is required")
+    @Size(max = 4000)
     String description,
 
     @NotBlank(message = "Category is required")
+    @Size(max = 100)
     String category,
 
     @NotBlank(message = "Brand is required")
+    @Size(max = 100)
     String brand,
 
     @NotNull
@@ -40,8 +44,7 @@ public record ProductRequest(
 
     List<String> images,
 
-    Map<String, String> specifications
+    Map<String, Object> specifications
 
 ) {}
-
 

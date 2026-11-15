@@ -1,6 +1,5 @@
 package com.flashsalex.product.dto;
 
-
 import java.time.Instant;
 
 public record ApiError(
