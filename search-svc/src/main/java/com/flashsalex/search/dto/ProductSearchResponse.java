@@ -1,11 +1,12 @@
 package com.flashsalex.search.dto;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 public record ProductSearchResponse(
-        List<SearchResult> products,
-        int page,
-        int size,
-        long totalElements,
-        int totalPages
+        String productId,
+        String name,
+        String category,
+        BigDecimal price,
+        String currency,
+        String thumbnail
 ) {}

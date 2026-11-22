@@ -1,18 +1,27 @@
-package com.flashsalex.search.document;
+package com.flashsalex.search.model;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(indexName = "products")
-public class ProductDocument {
+public class ProductSearchDocument {
 
     @Id
     private String productId;
@@ -23,7 +32,7 @@ public class ProductDocument {
     @Field(type = FieldType.Text)
     private String description;
 
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text)
     private String category;
 
     @Field(type = FieldType.Double)
@@ -32,9 +41,9 @@ public class ProductDocument {
     @Field(type = FieldType.Keyword)
     private String currency;
 
-    @Field(type = FieldType.Integer)
-    private Integer quantity;
+    @Field(type = FieldType.Object)
+    private Map<String, Object> attributes;
 
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Keyword, index = false)
     private List<String> imageUrls;
 }
