@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flashsalex.search.dto.ProductSearchResponse;
+import com.flashsalex.search.dto.SearchResultResponse;
 import com.flashsalex.search.service.SearchService;
 
 import jakarta.validation.constraints.Max;
@@ -15,7 +15,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/search")
+@RequestMapping("/search")
 @RequiredArgsConstructor
 @Validated
 public class SearchController {
@@ -23,10 +23,10 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping
-    public ProductSearchResponse searchProducts(
+    public SearchResultResponse searchProducts(
             @RequestParam
             @NotBlank
-            String keyword,
+            String q,
 
             @RequestParam(defaultValue = "0")
             @Min(0)
@@ -37,6 +37,6 @@ public class SearchController {
             @Max(100)
             int size
     ) {
-        return searchService.searchProducts(keyword, page, size);
+        return searchService.searchProducts(q, page, size);
     }
 }
