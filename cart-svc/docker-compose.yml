@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: flashsalex-cart-db
+    environment:
+      POSTGRES_DB: flashsalex_cart
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - cart_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  cart_postgres_data:

@@ -1,0 +1,36 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: cart-svc
+
+  datasource:
+    url: ${CART_DB_URL:jdbc:postgresql://localhost:5433/flashsalex_cart}
+    username: ${CART_DB_USERNAME:postgres}
+    password: ${CART_DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  jackson:
+    default-property-inclusion: non_null
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+app:
+  product-service:
+    url: ${PRODUCT_SERVICE_URL:http://localhost:9000}
