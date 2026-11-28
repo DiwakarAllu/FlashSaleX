@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-InventorySvcApplication<inventory-svc>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.flashsalex.inventory.InventorySvcApplication",
+            "projectName": "inventory-svc",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ProductSvcApplication<product-svc>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.flashsalex.product.ProductSvcApplication",
+            "projectName": "product-svc",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-UserSvcApplication<user-svc>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/user-svc",
+            "mainClass": "com.flashsalex.user.UserSvcApplication",
+            "projectName": "user-svc",
+            "args": "",
+            "envFile": "${workspaceFolder}/user-svc/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CartSvcApplication<cart-svc>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.flashsalex.cart.CartSvcApplication",
+            "projectName": "cart-svc",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

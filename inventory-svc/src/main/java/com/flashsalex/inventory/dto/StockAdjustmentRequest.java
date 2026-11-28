@@ -1,0 +1,8 @@
+package com.flashsalex.inventory.dto;
+
+import jakarta.validation.constraints.Min;
+
+public record StockAdjustmentRequest(
+    @Min(value = 1, message = "Quantity must be at least 1")
+    int quantity
+) {}
